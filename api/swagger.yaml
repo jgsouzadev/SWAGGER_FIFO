@@ -1,0 +1,388 @@
+---
+swagger: "2.0"
+info:
+  description: "Faz a lógica por trás do sistema FIFO"
+  version: "1.0.0"
+  title: "FIFO Api"
+  termsOfService: "http://localhost:3333/api/users/termos"
+  contact:
+    name: "Suporte"
+    url: "http://localhost:3333/api/users/suporte"
+    email: "souza.joaoguilherme2002@gmail.com"
+  license:
+    name: "MIT"
+    url: "http://opensource.org/licenses/MIT"
+host: "localhost:3333"
+schemes:
+- "http"
+- "https"
+paths:
+  /api/users:
+    get:
+      summary: "Retorna todos os usuários"
+      description: "Essa rota retorna todos os usuários"
+      operationId: "indexAll"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Busca realizada com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        "400":
+          description: "Usuário não existente"
+          schema:
+            $ref: "#/definitions/inline_response_400"
+        "500":
+          description: "Falha no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "Default"
+    post:
+      summary: "Cadastra usuário"
+      description: "Essa rota faz o cadastro de usuários"
+      operationId: "storeUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        required: true
+        schema:
+          $ref: "#/definitions/user"
+      responses:
+        "201":
+          description: "Usuário cadastrado com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_201"
+        "400":
+          description: "Falha ao cadastrar"
+          schema:
+            $ref: "#/definitions/inline_response_400_1"
+        "500":
+          description: "Erro interno no servidor"
+      x-swagger-router-controller: "Default"
+  /api/users/{id}:
+    get:
+      summary: "Retorna um usuário"
+      description: "Essa rota busca dados de 1 usuário"
+      operationId: "index"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to get the data"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Busca realizada com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        "400":
+          description: "Usuário não existente"
+          schema:
+            $ref: "#/definitions/inline_response_400"
+        "500":
+          description: "Falha no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "Default"
+    put:
+      summary: "Atualiza um usuário"
+      description: "Essa rota atualiza dados de 1 usuário"
+      operationId: "update"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to get the data before updated"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "userNewData"
+        required: false
+        schema:
+          $ref: "#/definitions/userNewData"
+      responses:
+        "200":
+          description: "Usuário atualizado com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+        "400":
+          description: "Usuário não existente"
+          schema:
+            $ref: "#/definitions/inline_response_400"
+        "500":
+          description: "Falha no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "Default"
+    delete:
+      summary: "Remover usuário por ID"
+      operationId: "deleteById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to get the data before deleted"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Usuário deletado com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_200_2"
+        "400":
+          description: "Usuário não existente"
+          schema:
+            $ref: "#/definitions/inline_response_400"
+        "500":
+          description: "Falha no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "Default"
+  /api/auth:
+    post:
+      summary: "Faz autenticação do usuário"
+      description: "Essa rota faz o login de usuário"
+      operationId: "Authentication"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        required: true
+        schema:
+          $ref: "#/definitions/user_1"
+      responses:
+        "201":
+          description: "Autenticação com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_201_1"
+        "400":
+          description: "Usuário não existente"
+          schema:
+            $ref: "#/definitions/inline_response_400_2"
+        "500":
+          description: "Falha no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500_1"
+      x-swagger-router-controller: "Default"
+    delete:
+      summary: "Remove token de autenticação"
+      description: "Essa rota faz anula o token de login"
+      operationId: "Destroy"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Token deletado com sucesso"
+          schema:
+            $ref: "#/definitions/inline_response_200_3"
+      x-swagger-router-controller: "Default"
+  /api/filials:
+    post:
+      summary: "Cria uma nova filial"
+      description: "Essa rota faz a criação de uma filial"
+      operationId: "storeFilial"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        required: true
+        schema:
+          $ref: "#/definitions/user_2"
+      responses:
+        "200":
+          description: "Filial criada"
+          schema:
+            $ref: "#/definitions/inline_response_200_4"
+      x-swagger-router-controller: "Default"
+definitions:
+  userNewData:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Novo Nome"
+      email:
+        type: "string"
+        example: "Novo Email"
+      password:
+        type: "string"
+        example: "Nova Senha"
+  inline_response_500_1:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Server error"
+  user_2:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Santos"
+  user_1:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        example: "email@fcamara.com.br"
+      password:
+        type: "string"
+        example: "mypassword"
+  inline_response_201:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Usuário cadastrado com sucesso"
+      token:
+        type: "string"
+        example: "eu281r89u3tjedssd12h8ygjsa"
+    example:
+      msg: "Usuário cadastrado com sucesso"
+      token: "eu281r89u3tjedssd12h8ygjsa"
+  inline_response_200_1:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Novo nome"
+      email:
+        type: "string"
+        example: "Novo email"
+      password:
+        type: "string"
+        example: "Nova senha"
+    example:
+      password: "Nova senha"
+      name: "Novo nome"
+      email: "Novo email"
+  inline_response_200:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "João Guilherme"
+      email:
+        type: "string"
+        example: "João Guilherme"
+      id_filial:
+        type: "integer"
+        example: 1
+    example:
+      id_filial: 1
+      name: "João Guilherme"
+      id: 1
+      email: "João Guilherme"
+  inline_response_200_2:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User deleted with sucess"
+    example:
+      msg: "User deleted with sucess"
+  inline_response_201_1:
+    type: "object"
+    properties:
+      auth:
+        type: "boolean"
+        example: true
+      token:
+        type: "string"
+        example: "jwttoken4981581573fhsdofjdsnfo23yr"
+    example:
+      auth: true
+      token: "jwttoken4981581573fhsdofjdsnfo23yr"
+  inline_response_200_3:
+    type: "object"
+    properties:
+      auth:
+        type: "boolean"
+        example: false
+      token:
+        type: "boolean"
+        example: false
+    example:
+      auth: false
+      token: false
+  inline_response_200_4:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      location:
+        type: "string"
+        example: "Santos"
+      updatedAt:
+        type: "string"
+        example: "11/08/2020 22:10"
+      createdAt:
+        type: "string"
+        example: "11/08/2020 22:10"
+    example:
+      createdAt: "11/08/2020 22:10"
+      location: "Santos"
+      id: 1
+      updatedAt: "11/08/2020 22:10"
+  user:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "João Guilherme"
+      email:
+        type: "string"
+        example: "emai@fcamara.com.br"
+      password:
+        type: "string"
+        example: "mypassword"
+      id_filial:
+        type: "integer"
+        example: 1
+  inline_response_500:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Falha ao buscar"
+  inline_response_400_2:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User not autenticated"
+  inline_response_400:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User not found"
+  inline_response_400_1:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Falha no cadastro"
