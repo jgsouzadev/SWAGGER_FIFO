@@ -5,3 +5,12 @@
 <li> Em seguida acesse o repositório pelo terminal e use o comando: ` npm install `</li>
 <li> Após instalar : `node index.js` </li>
 </ol>
+
+
+## Link Back-end
+
+https://github.com/AndrewDiass/lazer-fcamara-backend
+
+## Link Front-end
+
+https://github.com/AndrewDiass/lazer-fcamara-frontend
