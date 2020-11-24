@@ -13,12 +13,23 @@ info:
     name: "MIT"
     url: "http://opensource.org/licenses/MIT"
 host: "localhost:3333"
+tags:
+- name: "users"
+  description: "Everything about users"
+- name: "auth"
+  description: "Access to authentication methods"
+- name: "filials"
+  description: "Operations about filials"
+- name: "queues"
+  description: "Queues methods"
 schemes:
 - "http"
 - "https"
 paths:
   /api/users:
     get:
+      tags:
+      - "users"
       summary: "Retorna todos os usuários"
       description: "Essa rota retorna todos os usuários"
       operationId: "indexAll"
@@ -38,8 +49,10 @@ paths:
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Users"
     post:
+      tags:
+      - "users"
       summary: "Cadastra usuário"
       description: "Essa rota faz o cadastro de usuários"
       operationId: "storeUser"
@@ -64,9 +77,11 @@ paths:
             $ref: "#/definitions/inline_response_400_1"
         "500":
           description: "Erro interno no servidor"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Users"
   /api/users/{id}:
     get:
+      tags:
+      - "users"
       summary: "Retorna um usuário"
       description: "Essa rota busca dados de 1 usuário"
       operationId: "index"
@@ -91,8 +106,10 @@ paths:
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Users"
     put:
+      tags:
+      - "users"
       summary: "Atualiza um usuário"
       description: "Essa rota atualiza dados de 1 usuário"
       operationId: "update"
@@ -122,8 +139,10 @@ paths:
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Users"
     delete:
+      tags:
+      - "users"
       summary: "Remover usuário por ID"
       operationId: "deleteById"
       produces:
@@ -147,9 +166,11 @@ paths:
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Users"
   /api/auth:
     post:
+      tags:
+      - "auth"
       summary: "Faz autenticação do usuário"
       description: "Essa rota faz o login de usuário"
       operationId: "Authentication"
@@ -176,8 +197,10 @@ paths:
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500_1"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Auth"
     delete:
+      tags:
+      - "auth"
       summary: "Remove token de autenticação"
       description: "Essa rota faz anula o token de login"
       operationId: "Destroy"
@@ -191,9 +214,11 @@ paths:
           description: "Token deletado com sucesso"
           schema:
             $ref: "#/definitions/inline_response_200_3"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Auth"
   /api/filials:
     post:
+      tags:
+      - "filials"
       summary: "Cria uma nova filial"
       description: "Essa rota faz a criação de uma filial"
       operationId: "storeFilial"
@@ -212,8 +237,68 @@ paths:
           description: "Filial criada"
           schema:
             $ref: "#/definitions/inline_response_200_4"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Filials"
+  /api/queues:
+    put:
+      tags:
+      - "queues"
+      summary: "Insere o usuário na fila"
+      description: "Essa rota cria o registro ou atualiza o status na fila"
+      operationId: "storeQueue"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "platform"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        "201":
+          description: "User is on queue"
+          schema:
+            $ref: "#/definitions/inline_response_201_2"
+        "400":
+          description: "User or platform not found"
+          schema:
+            $ref: "#/definitions/inline_response_400_3"
+      x-swagger-router-controller: "Queues"
+  /api/queues/sair:
+    put:
+      tags:
+      - "queues"
+      summary: "Remove o usuário da fila"
+      description: "Essa rota atualiza o status na fila para 0"
+      operationId: "removeQueue"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "platform"
+        required: true
+        schema:
+          type: "object"
+      responses:
+        "201":
+          description: "User is off the queue"
+          schema:
+            $ref: "#/definitions/inline_response_201_3"
+        "400":
+          description: "User or platform not found"
+          schema:
+            $ref: "#/definitions/inline_response_400_3"
+      x-swagger-router-controller: "Queues"
 definitions:
+  inline_response_400_3:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Usuário ou plataforma inexistentes."
   userNewData:
     type: "object"
     properties:
@@ -327,6 +412,14 @@ definitions:
     example:
       auth: false
       token: false
+  inline_response_201_2:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User is on queue"
+    example:
+      msg: "User is on queue"
   inline_response_200_4:
     type: "object"
     properties:
@@ -347,6 +440,14 @@ definitions:
       location: "Santos"
       id: 1
       updatedAt: "11/08/2020 22:10"
+  inline_response_201_3:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Saiu com sucesso"
+    example:
+      msg: "Saiu com sucesso"
   user:
     type: "object"
     properties:
