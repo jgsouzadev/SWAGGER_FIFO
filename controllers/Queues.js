@@ -3,6 +3,26 @@
 var utils = require('../utils/writer.js');
 var Queues = require('../service/QueuesService');
 
+module.exports.getAllQueueData = function getAllQueueData (req, res, next) {
+  Queues.getAllQueueData()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.polling = function polling (req, res, next) {
+  Queues.polling()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.removeQueue = function removeQueue (req, res, next) {
   var platform = req.swagger.params['platform'].value;
   Queues.removeQueue(platform)

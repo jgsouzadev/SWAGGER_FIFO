@@ -239,6 +239,27 @@ paths:
             $ref: "#/definitions/inline_response_200_4"
       x-swagger-router-controller: "Filials"
   /api/queues:
+    get:
+      tags:
+      - "queues"
+      summary: "Obtem os dados da plataforma"
+      description: "Essa rota retorna os dados das plataformas"
+      operationId: "getAllQueueData"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Returned with sucessfully"
+          schema:
+            $ref: "#/definitions/inline_response_200_5"
+        "400":
+          description: "User or platform not found"
+          schema:
+            $ref: "#/definitions/inline_response_400_3"
+      x-swagger-router-controller: "Queues"
     put:
       tags:
       - "queues"
@@ -263,9 +284,9 @@ paths:
         "400":
           description: "User or platform not found"
           schema:
-            $ref: "#/definitions/inline_response_400_3"
+            $ref: "#/definitions/inline_response_400_4"
       x-swagger-router-controller: "Queues"
-  /api/queues/sair:
+  /api/queues/exit:
     put:
       tags:
       - "queues"
@@ -290,33 +311,50 @@ paths:
         "400":
           description: "User or platform not found"
           schema:
-            $ref: "#/definitions/inline_response_400_3"
+            $ref: "#/definitions/inline_response_400_4"
+      x-swagger-router-controller: "Queues"
+  /api/queues/polling:
+    get:
+      tags:
+      - "queues"
+      summary: "Obtem a posicao do usuario"
+      description: "Essa rota retorna os dados das plataformas"
+      operationId: "polling"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "User or platform not found"
+          schema:
+            $ref: "#/definitions/inline_response_200_6"
       x-swagger-router-controller: "Queues"
 definitions:
-  platform_1:
-    type: "object"
-    properties:
-      platform:
-        type: "integer"
-        example: 1
-  inline_response_400_3:
+  inline_response_400_4:
     type: "object"
     properties:
       msg:
         type: "string"
         example: "Usuário ou plataforma inexistentes."
-  userNewData:
+  inline_response_400_3:
     type: "object"
     properties:
-      name:
+      msg:
         type: "string"
-        example: "Novo Nome"
-      email:
-        type: "string"
-        example: "Novo Email"
-      password:
-        type: "string"
-        example: "Nova Senha"
+        example: "Erro na request."
+  inline_response_200_5_sinucaObject:
+    type: "object"
+    properties:
+      ids:
+        type: "array"
+        items:
+          type: "integer"
+    example:
+      ids:
+      - 0
+      - 0
   platform:
     type: "object"
     properties:
@@ -356,22 +394,6 @@ definitions:
     example:
       msg: "Usuário cadastrado com sucesso"
       token: "eu281r89u3tjedssd12h8ygjsa"
-  inline_response_200_1:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-        example: "Novo nome"
-      email:
-        type: "string"
-        example: "Novo email"
-      password:
-        type: "string"
-        example: "Nova senha"
-    example:
-      password: "Nova senha"
-      name: "Novo nome"
-      email: "Novo email"
   inline_response_200:
     type: "object"
     properties:
@@ -392,6 +414,90 @@ definitions:
       name: "João Guilherme"
       id: 1
       email: "João Guilherme"
+  inline_response_500:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Falha ao buscar"
+  inline_response_400_2:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User not autenticated"
+  inline_response_400:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User not found"
+  inline_response_400_1:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Falha no cadastro"
+  platform_1:
+    type: "object"
+    properties:
+      platform:
+        type: "integer"
+        example: 1
+  inline_response_200_5:
+    type: "object"
+    properties:
+      sinucaObject:
+        $ref: "#/definitions/inline_response_200_5_sinucaObject"
+      size:
+        type: "integer"
+        example: 0
+    example:
+      size: 0
+      sinucaObject:
+        ids:
+        - 0
+        - 0
+  inline_response_200_6:
+    type: "object"
+    properties:
+      position:
+        type: "integer"
+        example: 1
+      id_user:
+        type: "integer"
+        example: 2
+    example:
+      position: 1
+      id_user: 2
+  userNewData:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Novo Nome"
+      email:
+        type: "string"
+        example: "Novo Email"
+      password:
+        type: "string"
+        example: "Nova Senha"
+  inline_response_200_1:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Novo nome"
+      email:
+        type: "string"
+        example: "Novo email"
+      password:
+        type: "string"
+        example: "Nova senha"
+    example:
+      password: "Nova senha"
+      name: "Novo nome"
+      email: "Novo email"
   inline_response_200_2:
     type: "object"
     properties:
@@ -430,8 +536,12 @@ definitions:
       msg:
         type: "string"
         example: "User is on queue"
+      position:
+        type: "integer"
+        example: 2
     example:
       msg: "User is on queue"
+      position: 2
   inline_response_200_4:
     type: "object"
     properties:
@@ -472,30 +582,6 @@ definitions:
       password:
         type: "string"
         example: "mypassword"
-      id_filial:
+      filial:
         type: "integer"
         example: 1
-  inline_response_500:
-    type: "object"
-    properties:
-      msg:
-        type: "string"
-        example: "Falha ao buscar"
-  inline_response_400_2:
-    type: "object"
-    properties:
-      msg:
-        type: "string"
-        example: "User not autenticated"
-  inline_response_400:
-    type: "object"
-    properties:
-      msg:
-        type: "string"
-        example: "User not found"
-  inline_response_400_1:
-    type: "object"
-    properties:
-      msg:
-        type: "string"
-        example: "Falha no cadastro"
