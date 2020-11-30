@@ -191,7 +191,12 @@ paths:
       - "application/json"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "200":
           description: "Verifica se a autorização e valida"
@@ -201,6 +206,14 @@ paths:
           description: "Se autorização for valida e ele estiver na fila"
           schema:
             $ref: "#/definitions/inline_response_201_1"
+        "400":
+          description: "Token não valido"
+          schema:
+            $ref: "#/definitions/inline_response_400_3"
+        "401":
+          description: "Token inexistente"
+          schema:
+            $ref: "#/definitions/inline_response_401"
       x-swagger-router-controller: "Auth"
     post:
       tags:
@@ -230,7 +243,7 @@ paths:
         "400":
           description: "Usuário não existente"
           schema:
-            $ref: "#/definitions/inline_response_400_3"
+            $ref: "#/definitions/inline_response_400_4"
         "500":
           description: "Falha no servidor"
           schema:
@@ -308,7 +321,7 @@ paths:
       tags:
       - "platforms"
       summary: "Cria uma nova plataforma"
-      description: "Essa rota faz a criação de uma plataforma"
+      description: "Essa rota retorna dados da plataforma pelo id"
       operationId: "getPlatform"
       consumes:
       - "application/json"
@@ -479,12 +492,21 @@ paths:
             $ref: "#/definitions/inline_response_500_7"
       x-swagger-router-controller: "Queues"
 definitions:
-  inline_response_400_3:
+  inline_response_400_4:
     type: "object"
     properties:
       msg:
         type: "string"
         example: "User not autenticated"
+  inline_response_400_3:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Token isn't valid."
+      auth:
+        type: "boolean"
+        example: false
   inline_response_200_10:
     type: "object"
     properties:
@@ -597,6 +619,15 @@ definitions:
       msgIfEmailIsNotValid:
         type: "string"
         example: "e-mail is not allowed, try again using @fcamara.com.br"
+  inline_response_401:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Token not found."
+      auth:
+        type: "boolean"
+        example: false
   inline_response_400:
     type: "object"
     properties:
