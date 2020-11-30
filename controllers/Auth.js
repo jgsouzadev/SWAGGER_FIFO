@@ -23,3 +23,13 @@ module.exports.destroy = function destroy (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.validate = function validate (req, res, next) {
+  Auth.validate()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};

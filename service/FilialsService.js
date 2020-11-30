@@ -5,15 +5,15 @@
  * Cria uma nova filial
  * Essa rota faz a criação de uma filial
  *
- * user User_2 
- * returns inline_response_200_4
+ * filial Filial 
+ * returns inline_response_200_6
  **/
-exports.storeFilial = function(user) {
+exports.storeFilial = function(filial) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
   "createdAt" : "11/08/2020 22:10",
-  "location" : "Santos",
+  "name" : "Santos",
   "id" : 1,
   "updatedAt" : "11/08/2020 22:10"
 };

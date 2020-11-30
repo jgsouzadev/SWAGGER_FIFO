@@ -12,7 +12,7 @@ info:
   license:
     name: "MIT"
     url: "http://opensource.org/licenses/MIT"
-host: "localhost:3333"
+host: "206.189.189.136:3333"
 tags:
 - name: "users"
   description: "Everything about users"
@@ -22,6 +22,8 @@ tags:
   description: "Operations about filials"
 - name: "queues"
   description: "Queues methods"
+- name: "platforms"
+  description: "platforms methods"
 schemes:
 - "http"
 - "https"
@@ -41,10 +43,6 @@ paths:
           description: "Busca realizada com sucesso"
           schema:
             $ref: "#/definitions/inline_response_200"
-        "400":
-          description: "Usuário não existente"
-          schema:
-            $ref: "#/definitions/inline_response_400"
         "500":
           description: "Falha no servidor"
           schema:
@@ -72,11 +70,13 @@ paths:
           schema:
             $ref: "#/definitions/inline_response_201"
         "400":
-          description: "Falha ao cadastrar"
+          description: "Possiveis mensagens de erro na request"
           schema:
-            $ref: "#/definitions/inline_response_400_1"
+            $ref: "#/definitions/inline_response_400"
         "500":
           description: "Erro interno no servidor"
+          schema:
+            $ref: "#/definitions/inline_response_500"
       x-swagger-router-controller: "Users"
   /api/users/{id}:
     get:
@@ -101,7 +101,7 @@ paths:
         "400":
           description: "Usuário não existente"
           schema:
-            $ref: "#/definitions/inline_response_400"
+            $ref: "#/definitions/inline_response_400_1"
         "500":
           description: "Falha no servidor"
           schema:
@@ -132,13 +132,13 @@ paths:
           schema:
             $ref: "#/definitions/inline_response_200_1"
         "400":
-          description: "Usuário não existente"
+          description: "Mensagens de erro"
           schema:
-            $ref: "#/definitions/inline_response_400"
+            $ref: "#/definitions/inline_response_400_2"
         "500":
           description: "Falha no servidor"
           schema:
-            $ref: "#/definitions/inline_response_500"
+            $ref: "#/definitions/inline_response_500_1"
       x-swagger-router-controller: "Users"
     delete:
       tags:
@@ -161,13 +161,34 @@ paths:
         "400":
           description: "Usuário não existente"
           schema:
-            $ref: "#/definitions/inline_response_400"
+            $ref: "#/definitions/inline_response_400_1"
         "500":
           description: "Falha no servidor"
           schema:
             $ref: "#/definitions/inline_response_500"
       x-swagger-router-controller: "Users"
   /api/auth:
+    get:
+      tags:
+      - "auth"
+      summary: "Valida se o usuário está na fila apartir do token"
+      description: "Validação para em casos de refresh"
+      operationId: "Validate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Verifica se a autorização e valida"
+          schema:
+            $ref: "#/definitions/inline_response_200_3"
+        "201":
+          description: "Se autorização for valida e ele estiver na fila"
+          schema:
+            $ref: "#/definitions/inline_response_201_1"
+      x-swagger-router-controller: "Auth"
     post:
       tags:
       - "auth"
@@ -185,18 +206,22 @@ paths:
         schema:
           $ref: "#/definitions/user_1"
       responses:
+        "200":
+          description: "Autenticação com usuario na fila"
+          schema:
+            $ref: "#/definitions/inline_response_200_4"
         "201":
           description: "Autenticação com sucesso"
           schema:
-            $ref: "#/definitions/inline_response_201_1"
+            $ref: "#/definitions/inline_response_201_2"
         "400":
           description: "Usuário não existente"
           schema:
-            $ref: "#/definitions/inline_response_400_2"
+            $ref: "#/definitions/inline_response_400_3"
         "500":
           description: "Falha no servidor"
           schema:
-            $ref: "#/definitions/inline_response_500_1"
+            $ref: "#/definitions/inline_response_500_2"
       x-swagger-router-controller: "Auth"
     delete:
       tags:
@@ -213,7 +238,7 @@ paths:
         "200":
           description: "Token deletado com sucesso"
           schema:
-            $ref: "#/definitions/inline_response_200_3"
+            $ref: "#/definitions/inline_response_200_5"
       x-swagger-router-controller: "Auth"
   /api/filials:
     post:
@@ -228,16 +253,74 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "user"
+        name: "filial"
         required: true
         schema:
-          $ref: "#/definitions/user_2"
+          $ref: "#/definitions/filial"
       responses:
         "200":
           description: "Filial criada"
           schema:
-            $ref: "#/definitions/inline_response_200_4"
+            $ref: "#/definitions/inline_response_200_6"
       x-swagger-router-controller: "Filials"
+  /api/platforms:
+    post:
+      tags:
+      - "platforms"
+      summary: "Cria uma nova plataforma"
+      description: "Essa rota faz a criação de uma plataforma"
+      operationId: "storePlatform"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "plataforma"
+        required: true
+        schema:
+          $ref: "#/definitions/plataforma"
+      responses:
+        "201":
+          description: "Plataforma criada"
+          schema:
+            $ref: "#/definitions/inline_response_201_3"
+        "500":
+          description: "Plataforma criada"
+          schema:
+            $ref: "#/definitions/inline_response_500_3"
+      x-swagger-router-controller: "Platforms"
+  /api/platforms/{id}:
+    get:
+      tags:
+      - "platforms"
+      summary: "Cria uma nova plataforma"
+      description: "Essa rota faz a criação de uma plataforma"
+      operationId: "getPlatform"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of platform to get the data"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Retorno dos dados"
+          schema:
+            $ref: "#/definitions/inline_response_200_7"
+        "404":
+          description: "Plataforma não encontrada"
+          schema:
+            $ref: "#/definitions/inline_response_404"
+        "500":
+          description: "Server error"
+          schema:
+            $ref: "#/definitions/inline_response_500_2"
+      x-swagger-router-controller: "Platforms"
   /api/queues:
     get:
       tags:
@@ -254,13 +337,13 @@ paths:
         "200":
           description: "Returned with sucessfully"
           schema:
-            $ref: "#/definitions/inline_response_200_5"
-        "400":
-          description: "User or platform not found"
+            $ref: "#/definitions/inline_response_200_8"
+        "500":
+          description: "Server erro"
           schema:
-            $ref: "#/definitions/inline_response_400_3"
+            $ref: "#/definitions/inline_response_500_4"
       x-swagger-router-controller: "Queues"
-    put:
+    post:
       tags:
       - "queues"
       summary: "Insere o usuário na fila"
@@ -280,11 +363,11 @@ paths:
         "201":
           description: "User is on queue"
           schema:
-            $ref: "#/definitions/inline_response_201_2"
-        "400":
-          description: "User or platform not found"
+            $ref: "#/definitions/inline_response_201_4"
+        "500":
+          description: "Server error"
           schema:
-            $ref: "#/definitions/inline_response_400_4"
+            $ref: "#/definitions/inline_response_500_5"
       x-swagger-router-controller: "Queues"
   /api/queues/exit:
     put:
@@ -307,13 +390,13 @@ paths:
         "201":
           description: "User is off the queue"
           schema:
-            $ref: "#/definitions/inline_response_201_3"
-        "400":
+            $ref: "#/definitions/inline_response_201_5"
+        "500":
           description: "User or platform not found"
           schema:
-            $ref: "#/definitions/inline_response_400_4"
+            $ref: "#/definitions/inline_response_500_6"
       x-swagger-router-controller: "Queues"
-  /api/queues/polling:
+  /api/queues/polling/{platform}:
     get:
       tags:
       - "queues"
@@ -324,55 +407,107 @@ paths:
       - "application/json"
       produces:
       - "application/json"
+      parameters:
+      - name: "platform"
+        in: "path"
+        description: "ID of platform to get the user position"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/inline_response_200_9"
+        "500":
+          description: "server error"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "Queues"
+  /api/queues/disable-notification:
+    put:
+      tags:
+      - "queues"
+      summary: "Desativa dados da notificação"
+      description: "Essa rota alterna os status do receiveEmail"
+      operationId: "disable-notification"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       parameters: []
       responses:
         "200":
-          description: "User or platform not found"
+          description: "Success"
           schema:
-            $ref: "#/definitions/inline_response_200_6"
+            $ref: "#/definitions/inline_response_200_10"
+        "500":
+          description: "server error"
+          schema:
+            $ref: "#/definitions/inline_response_500_7"
       x-swagger-router-controller: "Queues"
 definitions:
-  inline_response_400_4:
-    type: "object"
-    properties:
-      msg:
-        type: "string"
-        example: "Usuário ou plataforma inexistentes."
   inline_response_400_3:
     type: "object"
     properties:
       msg:
         type: "string"
-        example: "Erro na request."
-  inline_response_200_5_sinucaObject:
+        example: "User not autenticated"
+  inline_response_200_10:
     type: "object"
     properties:
-      ids:
-        type: "array"
-        items:
-          type: "integer"
+      msg:
+        type: "string"
+        example: "Status updated with sucessfully"
     example:
-      ids:
-      - 0
-      - 0
+      msg: "Status updated with sucessfully"
+  inline_response_500_7:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Error on request"
+  inline_response_500_6:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Server error, try again!"
+  inline_response_500_5:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Server error."
+  inline_response_500_4:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Error on request."
+  inline_response_500_3:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Failure to create"
   platform:
     type: "object"
     properties:
       platform:
         type: "integer"
         example: 1
-  inline_response_500_1:
+  inline_response_500_2:
     type: "object"
     properties:
       msg:
         type: "string"
         example: "Server error"
-  user_2:
+  inline_response_500_1:
     type: "object"
     properties:
-      name:
+      msg:
         type: "string"
-        example: "Santos"
+        example: "Update not available"
   user_1:
     type: "object"
     properties:
@@ -419,57 +554,141 @@ definitions:
     properties:
       msg:
         type: "string"
-        example: "Falha ao buscar"
+        example: "Error on server"
   inline_response_400_2:
     type: "object"
     properties:
       msg:
         type: "string"
-        example: "User not autenticated"
+        example: "User not found"
+      msgIfEmailIsNotValid:
+        type: "string"
+        example: "e-mail is not allowed, try again using @fcamara.com.br"
   inline_response_400:
     type: "object"
     properties:
       msg:
         type: "string"
-        example: "User not found"
+        example: "e-mail is not allowed, try again using @fcamara.com.br"
+      msgIfEmailExists:
+        type: "string"
+        example: "e-mail is existent, try again using other"
   inline_response_400_1:
     type: "object"
     properties:
       msg:
         type: "string"
-        example: "Falha no cadastro"
+        example: "User not found"
   platform_1:
     type: "object"
     properties:
       platform:
         type: "integer"
         example: 1
-  inline_response_200_5:
-    type: "object"
-    properties:
-      sinucaObject:
-        $ref: "#/definitions/inline_response_200_5_sinucaObject"
-      size:
-        type: "integer"
-        example: 0
-    example:
-      size: 0
-      sinucaObject:
-        ids:
-        - 0
-        - 0
-  inline_response_200_6:
+  inline_response_200_9:
     type: "object"
     properties:
       position:
         type: "integer"
-        example: 1
-      id_user:
+        example: 6
+    example:
+      position: 6
+  filial:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Santos"
+  inline_response_404:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Platform not found"
+  inline_response_200_5:
+    type: "object"
+    properties:
+      auth:
+        type: "boolean"
+        example: false
+      token:
+        type: "boolean"
+        example: false
+    example:
+      auth: false
+      token: false
+  inline_response_201_4:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "User is on queue"
+      position:
         type: "integer"
         example: 2
+      notification:
+        type: "boolean"
+        example: true
     example:
-      position: 1
-      id_user: 2
+      msg: "User is on queue"
+      notification: true
+      position: 2
+  inline_response_200_6:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "Santos"
+      updatedAt:
+        type: "string"
+        example: "11/08/2020 22:10"
+      createdAt:
+        type: "string"
+        example: "11/08/2020 22:10"
+    example:
+      createdAt: "11/08/2020 22:10"
+      name: "Santos"
+      id: 1
+      updatedAt: "11/08/2020 22:10"
+  inline_response_201_5:
+    type: "object"
+    properties:
+      msg:
+        type: "string"
+        example: "Exited with sucessfully"
+    example:
+      msg: "Exited with sucessfully"
+  inline_response_200_7:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "PS4"
+      location:
+        type: "string"
+        example: "Sala Zelda"
+    example:
+      name: "PS4"
+      location: "Sala Zelda"
+      id: 1
+  inline_response_200_8:
+    type: "object"
+    properties:
+      id_platform:
+        type: "integer"
+        example: 2
+      size:
+        type: "integer"
+        example: 11
+    example:
+      size: 11
+      id_platform: 2
   userNewData:
     type: "object"
     properties:
@@ -482,6 +701,15 @@ definitions:
       password:
         type: "string"
         example: "Nova Senha"
+  plataforma:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "PlayStation 4"
+      location:
+        type: "string"
+        example: "Pátio"
   inline_response_200_1:
     type: "object"
     properties:
@@ -512,64 +740,50 @@ definitions:
       auth:
         type: "boolean"
         example: true
-      token:
-        type: "string"
-        example: "jwttoken4981581573fhsdofjdsnfo23yr"
-    example:
-      auth: true
-      token: "jwttoken4981581573fhsdofjdsnfo23yr"
+      id_platform:
+        type: "integer"
+        example: 3
   inline_response_200_3:
     type: "object"
     properties:
       auth:
         type: "boolean"
-        example: false
-      token:
-        type: "boolean"
-        example: false
+        example: true
     example:
-      auth: false
-      token: false
+      auth: true
   inline_response_201_2:
     type: "object"
     properties:
-      msg:
+      auth:
+        type: "boolean"
+        example: true
+      token:
         type: "string"
-        example: "User is on queue"
-      position:
-        type: "integer"
-        example: 2
-    example:
-      msg: "User is on queue"
-      position: 2
+        example: "jwttoken4981581573fhsdofjdsnfo23yr"
   inline_response_200_4:
     type: "object"
     properties:
-      id:
+      auth:
+        type: "boolean"
+        example: true
+      token:
+        type: "string"
+        example: "jwttoken4981581573fhsdofjdsnfo23yr"
+      id_platform:
         type: "integer"
-        example: 1
-      location:
-        type: "string"
-        example: "Santos"
-      updatedAt:
-        type: "string"
-        example: "11/08/2020 22:10"
-      createdAt:
-        type: "string"
-        example: "11/08/2020 22:10"
+        example: 2
     example:
-      createdAt: "11/08/2020 22:10"
-      location: "Santos"
-      id: 1
-      updatedAt: "11/08/2020 22:10"
+      auth: true
+      id_platform: 2
+      token: "jwttoken4981581573fhsdofjdsnfo23yr"
   inline_response_201_3:
     type: "object"
     properties:
       msg:
         type: "string"
-        example: "Saiu com sucesso"
+        example: "Created at success"
     example:
-      msg: "Saiu com sucesso"
+      msg: "Created at success"
   user:
     type: "object"
     properties:
