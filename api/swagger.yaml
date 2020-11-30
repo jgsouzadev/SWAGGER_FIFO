@@ -2,12 +2,10 @@
 swagger: "2.0"
 info:
   description: "Faz a lógica por trás do sistema FIFO"
-  version: "1.0.0"
+  version: "1.1.0"
   title: "FIFO Api"
-  termsOfService: "http://localhost:3333/api/users/termos"
   contact:
     name: "Suporte"
-    url: "http://localhost:3333/api/users/suporte"
     email: "souza.joaoguilherme2002@gmail.com"
   license:
     name: "MIT"
@@ -88,6 +86,11 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       - name: "id"
         in: "path"
         description: "ID of user to get the data"
@@ -121,6 +124,11 @@ paths:
         description: "ID of user to get the data before updated"
         required: true
         type: "integer"
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       - in: "body"
         name: "userNewData"
         required: false
@@ -153,6 +161,11 @@ paths:
         description: "ID of user to get the data before deleted"
         required: true
         type: "integer"
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "200":
           description: "Usuário deletado com sucesso"
@@ -359,6 +372,11 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/platform"
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "201":
           description: "User is on queue"
@@ -386,6 +404,11 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/platform_1"
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "201":
           description: "User is off the queue"
@@ -413,6 +436,11 @@ paths:
         description: "ID of platform to get the user position"
         required: true
         type: "integer"
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "200":
           description: "Success"
@@ -434,7 +462,12 @@ paths:
       - "application/json"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "x-access-token"
+        in: "header"
+        description: "token gerado por login ou criação de usuário"
+        required: true
+        type: "string"
       responses:
         "200":
           description: "Success"
