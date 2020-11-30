@@ -4,8 +4,8 @@ var utils = require('../utils/writer.js');
 var Filials = require('../service/FilialsService');
 
 module.exports.storeFilial = function storeFilial (req, res, next) {
-  var user = req.swagger.params['user'].value;
-  Filials.storeFilial(user)
+  var filial = req.swagger.params['filial'].value;
+  Filials.storeFilial(filial)
     .then(function (response) {
       utils.writeJson(res, response);
     })
