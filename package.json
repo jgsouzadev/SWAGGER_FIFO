@@ -1,11 +1,11 @@
 {
   "name": "fifo-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Faz a lógica por trás do sistema FIFO",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node index.js"
+	"prestart": "npm install",
+	"start": "node index.js"
   },
   "keywords": [
     "swagger"

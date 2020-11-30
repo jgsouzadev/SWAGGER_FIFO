@@ -4,7 +4,8 @@ var utils = require('../utils/writer.js');
 var Queues = require('../service/QueuesService');
 
 module.exports.disableNotification = function disableNotification (req, res, next) {
-  Queues.disableNotification()
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Queues.disableNotification(xAccessToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -25,7 +26,8 @@ module.exports.getAllQueueData = function getAllQueueData (req, res, next) {
 
 module.exports.polling = function polling (req, res, next) {
   var platform = req.swagger.params['platform'].value;
-  Queues.polling(platform)
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Queues.polling(platform,xAccessToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -36,7 +38,8 @@ module.exports.polling = function polling (req, res, next) {
 
 module.exports.removeQueue = function removeQueue (req, res, next) {
   var platform = req.swagger.params['platform'].value;
-  Queues.removeQueue(platform)
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Queues.removeQueue(platform,xAccessToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -47,7 +50,8 @@ module.exports.removeQueue = function removeQueue (req, res, next) {
 
 module.exports.storeQueue = function storeQueue (req, res, next) {
   var platform = req.swagger.params['platform'].value;
-  Queues.storeQueue(platform)
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Queues.storeQueue(platform,xAccessToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })

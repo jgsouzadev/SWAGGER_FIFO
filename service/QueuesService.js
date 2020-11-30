@@ -5,9 +5,10 @@
  * Desativa dados da notificação
  * Essa rota alterna os status do receiveEmail
  *
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_200_10
  **/
-exports.disableNotification = function() {
+exports.disableNotification = function(xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -49,9 +50,10 @@ exports.getAllQueueData = function() {
  * Essa rota retorna os dados das plataformas
  *
  * platform Integer ID of platform to get the user position
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_200_9
  **/
-exports.polling = function(platform) {
+exports.polling = function(platform,xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -71,9 +73,10 @@ exports.polling = function(platform) {
  * Essa rota atualiza o status na fila para 0
  *
  * platform Platform_1 
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_201_5
  **/
-exports.removeQueue = function(platform) {
+exports.removeQueue = function(platform,xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -93,9 +96,10 @@ exports.removeQueue = function(platform) {
  * Essa rota cria o registro ou atualiza o status na fila
  *
  * platform Platform 
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_201_4
  **/
-exports.storeQueue = function(platform) {
+exports.storeQueue = function(platform,xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

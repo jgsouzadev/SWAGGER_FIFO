@@ -5,9 +5,10 @@
  * Remover usuário por ID
  *
  * id Integer ID of user to get the data before deleted
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_200_2
  **/
-exports.deleteById = function(id) {
+exports.deleteById = function(id,xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -26,10 +27,11 @@ exports.deleteById = function(id) {
  * Retorna um usuário
  * Essa rota busca dados de 1 usuário
  *
+ * xAccessToken String token gerado por login ou criação de usuário
  * id Integer ID of user to get the data
  * returns inline_response_200
  **/
-exports.index = function(id) {
+exports.index = function(xAccessToken,id) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -99,10 +101,11 @@ exports.storeUser = function(user) {
  * Essa rota atualiza dados de 1 usuário
  *
  * id Integer ID of user to get the data before updated
+ * xAccessToken String token gerado por login ou criação de usuário
  * userNewData UserNewData  (optional)
  * returns inline_response_200_1
  **/
-exports.update = function(id,userNewData) {
+exports.update = function(id,xAccessToken,userNewData) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
