@@ -51,9 +51,10 @@ exports.destroy = function() {
  * Valida se o usuário está na fila apartir do token
  * Validação para em casos de refresh
  *
+ * xAccessToken String token gerado por login ou criação de usuário
  * returns inline_response_200_3
  **/
-exports.validate = function() {
+exports.validate = function(xAccessToken) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

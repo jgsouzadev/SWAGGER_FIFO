@@ -25,7 +25,8 @@ module.exports.destroy = function destroy (req, res, next) {
 };
 
 module.exports.validate = function validate (req, res, next) {
-  Auth.validate()
+  var xAccessToken = req.swagger.params['x-access-token'].value;
+  Auth.validate(xAccessToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })

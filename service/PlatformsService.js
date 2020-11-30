@@ -3,7 +3,7 @@
 
 /**
  * Cria uma nova plataforma
- * Essa rota faz a criação de uma plataforma
+ * Essa rota retorna dados da plataforma pelo id
  *
  * id Integer ID of platform to get the data
  * returns inline_response_200_7
