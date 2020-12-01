@@ -4,7 +4,7 @@
 <li> Clone o repositório usando o comando: ` git clone https://github.com/jgsouzadev/SWAGGER_FIFO.git `</li>
 <li> Em seguida acesse o repositório pelo terminal e use o comando: ` npm install `</li>
 <li> Após instalar : `node index.js` </li>
-<li> Acesse no navegador o link: localhost:3334/docs</li>
+<li> Acesse no navegador o link: localhost:3333/docs</li>
 </ol>
 
 
